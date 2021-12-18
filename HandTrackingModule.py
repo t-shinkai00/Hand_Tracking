@@ -19,32 +19,35 @@ class HandDetector():
   def findHands(self, img, draw =True):
     imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     self.results = self.hands.process(imgRGB)
-    # print(results.multi_hand_landmarks)
+    # print(self.results.multi_handedness)
     if self.results.multi_hand_landmarks:
-      for self.handLms in self.results.multi_hand_landmarks:
-        # print(self.results.multi_handedness)
-        labelList = []
-        for hand_handedness in self.results.multi_handedness:
-          handedness_dict = MessageToDict(hand_handedness)
-          labelList.append(handedness_dict["classification"][0]["label"])
+      # print(self.results.multi_hand_landmarks)
+      self.handsType = []
+      for hand_handedness in self.results.multi_handedness:
+        handedness_dict = MessageToDict(hand_handedness)
+        self.handsType.append(handedness_dict["classification"][0]["label"])
+      for id, handLms in enumerate(self.results.multi_hand_landmarks):
         if draw:
-          self.mpDraw.draw_landmarks(img, self.handLms, self.mpHands.HAND_CONNECTIONS)
-      print(labelList)
+          self.mpDraw.draw_landmarks(img, handLms, self.mpHands.HAND_CONNECTIONS)
+      # print(handsType)
     return img
 
-  def findPosition(self, img, handNo = 0, draw=True):
+  def findPosition(self, img, draw=True):
     lmList = []
     if self.results.multi_hand_landmarks:
-      myHand = self.results.multi_hand_landmarks[handNo]
+      # myHand = self.results.multi_hand_landmarks[handNo]
+      for handNo, handLms in enumerate(self.results.multi_hand_landmarks):
 
-      for id, lm in enumerate(self.handLms.landmark):
-        # print(id,lm)
-        h, w, c = img.shape
-        cx, cy = int(lm.x*w), int(lm.y*h)
-        # print(id, cx, cy)
-        lmList.append([id, cx, cy])
-        if draw:
-          cv2.circle(img, (cx, cy), 7, (255, 255, 255), cv2.FILLED)
+        for point, lm in enumerate(handLms.landmark):
+          # print(id,lm)
+          h, w, c = img.shape
+          cx, cy = int(lm.x*w), int(lm.y*h)
+          # print(id, cx, cy)
+          lmList.append([id, cx, cy])
+          if draw:
+            # cv2.circle(img, (cx, cy), 7, (255, 255, 255), cv2.FILLED)
+            if point == 0:
+              cv2.putText(img, self.handsType[handNo], (cx, cy), cv2.FONT_HERSHEY_PLAIN, 3, (255,0,255), 3)
     return lmList
 
 
@@ -60,10 +63,10 @@ def main():
     success, img = cap.read()
     img = cv2.flip(img, 1)
     img = detector.findHands(img, draw = True)
-    lmList = detector.findPosition(img, draw = False)
-    if len(lmList) != 0:
-      # print(lmList)
-      print(max(lmList, key = operator.itemgetter(1)))
+    lmList = detector.findPosition(img, draw = True)
+    # if len(lmList) != 0:
+    #   print(lmList)
+      # print(max(lmList, key = operator.itemgetter(1)))
     cTime = time.time()
     fps = 1/(cTime - pTime)
     pTime = cTime
