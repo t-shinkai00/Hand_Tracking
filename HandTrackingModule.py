@@ -1,6 +1,7 @@
 import cv2
 import mediapipe as mp
 import time
+import operator
 
 class HandDetector():
   def __init__(self, mode = False, maxHands = 2, complexity = 1, detectionConfidence = 0.5, trackingConfidence = 0.5):
@@ -55,6 +56,7 @@ def main():
     lmList = detector.findPosition(img, draw = False)
     if len(lmList) != 0:
       print(lmList)
+      # print(max(lmList, key = operator.itemgetter(1)))
     cTime = time.time()
     fps = 1/(cTime - pTime)
     pTime = cTime
