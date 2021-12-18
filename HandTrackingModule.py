@@ -1,11 +1,12 @@
 import cv2
 import mediapipe as mp
 import time
+
 class HandDetector():
   def __init__(self, mode = False, maxHands = 2, complexity = 1, detectionConfidence = 0.5, trackingConfidence = 0.5):
     self.mode = mode
     self.maxHands = maxHands
-    self. complexity = complexity
+    self.complexity = complexity
     self.detectionConfidence = detectionConfidence
     self.trackingConfidence = trackingConfidence
 
