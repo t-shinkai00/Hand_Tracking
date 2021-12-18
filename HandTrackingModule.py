@@ -55,8 +55,8 @@ def main():
     img = detector.findHands(img, draw = True)
     lmList = detector.findPosition(img, draw = False)
     if len(lmList) != 0:
-      print(lmList)
-      # print(max(lmList, key = operator.itemgetter(1)))
+      # print(lmList)
+      print(max(lmList, key = operator.itemgetter(1)))
     cTime = time.time()
     fps = 1/(cTime - pTime)
     pTime = cTime
