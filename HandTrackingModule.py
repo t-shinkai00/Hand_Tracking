@@ -2,6 +2,7 @@ import cv2
 import mediapipe as mp
 import time
 import operator
+from google.protobuf.json_format import MessageToDict
 
 class HandDetector():
   def __init__(self, mode = False, maxHands = 2, complexity = 1, detectionConfidence = 0.5, trackingConfidence = 0.5):
@@ -21,8 +22,14 @@ class HandDetector():
     # print(results.multi_hand_landmarks)
     if self.results.multi_hand_landmarks:
       for self.handLms in self.results.multi_hand_landmarks:
+        # print(self.results.multi_handedness)
+        labelList = []
+        for hand_handedness in self.results.multi_handedness:
+          handedness_dict = MessageToDict(hand_handedness)
+          labelList.append(handedness_dict["classification"][0]["label"])
         if draw:
           self.mpDraw.draw_landmarks(img, self.handLms, self.mpHands.HAND_CONNECTIONS)
+      print(labelList)
     return img
 
   def findPosition(self, img, handNo = 0, draw=True):
