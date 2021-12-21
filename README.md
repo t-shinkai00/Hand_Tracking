@@ -15,4 +15,4 @@
 
 ### 実行
 
-`python HandTrackingModule.py`
+`python main.py`
