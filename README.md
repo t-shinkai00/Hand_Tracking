@@ -13,6 +13,9 @@
 
 `pip install -r requirements.txt`
 
+> mediapipe のインストールは各々の環境に合わせて適切に行ってください。
+> `pip install mediapipe`では入らないみたいです。
+
 ### 実行
 
 `python main.py`
