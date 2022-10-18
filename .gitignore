@@ -1,2 +1,6 @@
 mediapipe/
+.venv/
+
+# cache
 __pycache__/
+*.pyc
