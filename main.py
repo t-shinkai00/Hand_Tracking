@@ -36,7 +36,7 @@ class HandDetector():
     lmList = []
     if self.results.multi_hand_landmarks:
       for handNo, handLms in enumerate(self.results.multi_hand_landmarks):
-        for point, lm in enumerate(handLms.landmark):
+        for id, lm in enumerate(handLms.landmark):
           # print(id,lm)
           h, w, c = img.shape
           cx, cy = int(lm.x*w), int(lm.y*h)
@@ -44,7 +44,7 @@ class HandDetector():
           lmList.append([id, cx, cy])
           if draw:
             # cv2.circle(img, (cx, cy), 7, (255, 255, 255), cv2.FILLED)
-            if point == 0:
+            if id == 0:
               cv2.putText(img, self.handsType[handNo], (cx, cy), cv2.FONT_HERSHEY_PLAIN, 3, (255,0,255), 3)
     return lmList
 
@@ -62,9 +62,7 @@ def main():
     img = cv2.flip(img, 1)
     img = detector.findHands(img, draw = True)
     lmList = detector.findPosition(img, draw = True)
-    # if len(lmList) != 0:
-    #   print(lmList)
-      # print(max(lmList, key = operator.itemgetter(1)))
+    # print(lmList)
     cTime = time.time()
     fps = 1/(cTime - pTime)
     pTime = cTime
